@@ -1,0 +1,41 @@
+﻿<main class="app-shell">
+  <section class="app-card">
+    <header class="hero">
+      <div>
+        <h1>Hello, {{ title() }}</h1>
+        <p>Track your recurring split cycle with calm clarity.</p>
+      </div>
+      <button type="button" class="settings-button" (click)="openSettings()">Settings</button>
+    </header>
+
+    <app-today-card [cycleDay]="todayCycleDay()"></app-today-card>
+
+    <app-month-header [label]="todayLabel()" (previousMonth)="previousMonth()" (nextMonth)="nextMonth()"></app-month-header>
+
+    <section class="calendar-grid" aria-label="Workout calendar">
+      <div class="day-label">Sun</div>
+      <div class="day-label">Mon</div>
+      <div class="day-label">Tue</div>
+      <div class="day-label">Wed</div>
+      <div class="day-label">Thu</div>
+      <div class="day-label">Fri</div>
+      <div class="day-label">Sat</div>
+
+      @for (cell of calendarDays(); track cell.date.toISOString()) {
+        @if (cell.dayLabel) {
+          <app-calendar-day [cell]="cell"></app-calendar-day>
+        } @else {
+          <div class="empty-cell"></div>
+        }
+      }
+    </section>
+  </section>
+
+  @if (showSetup()) {
+    <app-setup-dialog (selected)="onSelectCycleDay($event)"></app-setup-dialog>
+  }
+
+  @if (showSettings()) {
+    <app-settings-dialog [selected]="selectedCycleDay()" (save)="onSaveSettings($event)" (close)="closeSettings()"></app-settings-dialog>
+  }
+</main>
